@@ -1,8 +1,6 @@
 package singleton.seriable;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 /**
  * @author yangfan
@@ -13,7 +11,7 @@ import java.io.ObjectOutputStream;
 public class SerializableSingletonTest {
     public static void main(String[] args) {
 
-        SerializableSingleton singleton1 = null;
+        SerializableSingleton singleton1;
         SerializableSingleton singleton2 = SerializableSingleton.getInstance();
 
         //序列化写出
@@ -21,10 +19,14 @@ public class SerializableSingletonTest {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream("serializable.obj");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-//            objectOutputStream.write(singleton2.);
-//            o
+            objectOutputStream.writeObject(singleton2);
 
-        } catch (IOException e) {
+            FileInputStream fileInputStream = new FileInputStream("serializable.obj");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            singleton1 = (SerializableSingleton) objectInputStream.readObject();
+            //不是一个对象
+            System.out.println(singleton1 == singleton2);
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
